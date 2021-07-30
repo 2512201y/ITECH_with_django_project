@@ -1,11 +1,14 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','ITECH_with_django_project.settings')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
 
 import django
-django.setup()
 
+django.setup()
 from rango.models import Category, Page
 
+
+# For an explanation of what is going on here, please refer to the TwD book.
 
 def populate():
     python_pages = [
@@ -45,7 +48,7 @@ def populate():
     for cat, cat_data in cats.items():
         c = add_cat(cat, views=cat_data['views'], likes=cat_data['likes'])
         for p in cat_data['pages']:
-            add_page(c, p['title'], p['url'],views=p['views'])
+            add_page(c, p['title'], p['url'], views=p['views'])
 
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):
@@ -60,7 +63,7 @@ def add_page(cat, title, url, views=0):
     return p
 
 
-def add_cat(name, views, likes):
+def add_cat(name, views=0, likes=0):
     c = Category.objects.get_or_create(name=name)[0]
     c.views = views
     c.likes = likes

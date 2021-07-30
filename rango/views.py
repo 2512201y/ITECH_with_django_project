@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from rango.forms import PageForm
 
+
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
@@ -19,9 +20,11 @@ def index(request):
 
     return render(request, 'rango/index.html', context=context_dict)
 
+
 def about(request):
-    context_dict = {'newmodel_Chapter4':"This tutorial has been put together by Zhenhua Yang!"}
-    return render(request,'rango/about.html',context = context_dict)
+    # Spoiler: you don't need to pass a context dictionary here.
+    return render(request, 'rango/about.html')
+
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -47,7 +50,7 @@ def add_category(request):
 
         if form.is_valid():
             form.save(commit=True)
-            return redirect('/rango/')
+            return redirect(reverse('rango:index'))
         else:
             print(form.errors)
 
@@ -62,7 +65,7 @@ def add_page(request, category_name_slug):
 
     # You cannot add a page to a Category that does not exist... DM
     if category is None:
-        return redirect('/rango/')
+        return redirect(reverse('rango:index'))
 
     form = PageForm()
 
